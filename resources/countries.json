@@ -1,0 +1,52 @@
+{
+    "argentina": {
+      "code": "AR",
+      "latitude": -34.5,
+      "longitude": -58.4
+    },
+    "uruguay": {
+      "code": "UY",
+      "latitude": -32.5,
+      "longitude": -55.7
+    },
+    "chile": {
+      "code": "CL",
+      "latitude": -35.6,
+      "longitude": -71.5
+    },
+    "brasil": {
+      "code": "BR",
+      "latitude": -14.2,
+      "longitude": -51.9
+    },
+    "peru": {
+      "code": "PE",
+      "latitude": -9.1,
+      "longitude": -75
+    },
+    "vietnam": {
+      "code": "VN",
+      "latitude": 14,
+      "longitude": 108.2
+    },
+    "spain": {
+      "code": "ES",
+      "latitude": 40.4,
+      "longitude": -3.7
+    },
+    "italy": {
+      "code": "IT",
+      "latitude": 41.8,
+      "longitude": 12.5
+    },
+    "russia": {
+      "code": "RU",
+      "latitude": 61.5,
+      "longitude": 102.3
+    },
+    "turkey": {
+      "code": "TR",
+      "latitude": 38.9,
+      "longitude": 35.2
+    }
+  }
