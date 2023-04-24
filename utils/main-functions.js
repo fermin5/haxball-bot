@@ -1,4 +1,4 @@
-const room = require('../init.js');
+const { room } = require('../init.js');
 
 function getDate() {
     let d = new Date();
@@ -56,6 +56,14 @@ function getGoalGame(game) {
     return game.scores.red + game.scores.blue;
 }
 
+function checkGoalKickTouch(array, index, goal) {
+    if (array != null && array.length >= index + 1) {
+        var obj = array[index];
+        if (obj != null && obj.goal != null && obj.goal == goal) return obj;
+    }
+    return null;
+}
+
 module.exports = {
     getDate,
     getRandomInt,
@@ -68,5 +76,6 @@ module.exports = {
     getSecondsEmbed,
     getTimeGame,
     getTimeEmbed,
-    getGoalGame
+    getGoalGame,
+    checkGoalKickTouch
 };

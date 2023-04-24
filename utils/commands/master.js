@@ -1,4 +1,7 @@
-const room = require('../../init.js');
+const { room } = require('../../init.js');
+let { HaxNotification } = require('../variables/structures.js');
+
+const colors = require('../../resources/colors.js');
 
 function clearbansCommand(player, message) {
     var msgArray = message.split(/ +/).slice(1);
@@ -7,20 +10,20 @@ function clearbansCommand(player, message) {
         room.sendAnnouncement(
             '✔️ Bans cleared !',
             null,
-            announcementColor,
+            colors.announcementColor,
             'bold',
             null
         );
-        banList = [];
+        global.banList = [];
     } else if (msgArray.length == 1) {
         if (parseInt(msgArray[0]) > 0) {
             var ID = parseInt(msgArray[0]);
             room.clearBan(ID);
-            if (banList.length != banList.filter((p) => p[1] != ID).length) {
+            if (global.banList.length != global.banList.filter((p) => p[1] != ID).length) {
                 room.sendAnnouncement(
-                    `✔️ ${banList.filter((p) => p[1] == ID)[0][0]} has been unbanned from the room !`,
+                    `✔️ ${global.banList.filter((p) => p[1] == ID)[0][0]} has been unbanned from the room !`,
                     null,
-                    announcementColor,
+                    colors.announcementColor,
                     'bold',
                     null
                 );
@@ -28,17 +31,17 @@ function clearbansCommand(player, message) {
                 room.sendAnnouncement(
                     `The ID you entered doesn't have a ban associated to. Enter "!help clearbans" for more information.`,
                     player.id,
-                    errorColor,
+                    colors.errorColor,
                     'bold',
                     HaxNotification.CHAT
                 );
             }
-            banList = banList.filter((p) => p[1] != ID);
+            global.banList = global.banList.filter((p) => p[1] != ID);
         } else {
             room.sendAnnouncement(
                 `Invalid ID entered. Enter "!help clearbans" for more information.`,
                 player.id,
-                errorColor,
+                colors.errorColor,
                 'bold',
                 HaxNotification.CHAT
             );
@@ -47,7 +50,7 @@ function clearbansCommand(player, message) {
         room.sendAnnouncement(
             `Wrong number of arguments. Enter "!help clearbans" for more information.`,
             player.id,
-            errorColor,
+            colors.errorColor,
             'bold',
             HaxNotification.CHAT
         );
@@ -55,50 +58,50 @@ function clearbansCommand(player, message) {
 }
 
 function banListCommand(player, message) {
-    if (banList.length == 0) {
+    if (global.banList.length == 0) {
         room.sendAnnouncement(
             "📢 There's nobody in the ban list.",
             player.id,
-            announcementColor,
+            colors.announcementColor,
             'bold',
             null
         );
         return false;
     }
     var cstm = '📢 Ban list : ';
-    for (let ban of banList) {
+    for (let ban of global.banList) {
         cstm += ban[0] + `[${ban[1]}], `;
     }
     cstm = cstm.substring(0, cstm.length - 2) + '.';
     room.sendAnnouncement(
         cstm,
         player.id,
-        announcementColor,
+        colors.announcementColor,
         'bold',
         null
     );
 }
 
 function adminListCommand(player, message) {
-    if (adminList.length == 0) {
+    if (global.adminList.length == 0) {
         room.sendAnnouncement(
             "📢 There's nobody in the admin list.",
             player.id,
-            announcementColor,
+            colors.announcementColor,
             'bold',
             null
         );
         return false;
     }
     var cstm = '📢 Admin list : ';
-    for (let i = 0; i < adminList.length; i++) {
-        cstm += adminList[i][1] + `[${i}], `;
+    for (let i = 0; i < global.adminList.length; i++) {
+        cstm += global.adminList[i][1] + `[${i}], `;
     }
     cstm = cstm.substring(0, cstm.length - 2) + '.';
     room.sendAnnouncement(
         cstm,
         player.id,
-        announcementColor,
+        colors.announcementColor,
         'bold',
         null
     );
@@ -112,14 +115,14 @@ function setAdminCommand(player, message) {
             if (room.getPlayer(parseInt(msgArray[0])) != null) {
                 var playerAdmin = room.getPlayer(parseInt(msgArray[0]));
 
-                if (!adminList.map((a) => a[0]).includes(authArray[playerAdmin.id][0])) {
-                    if (!masterList.includes(authArray[playerAdmin.id][0])) {
+                if (!global.adminList.map((a) => a[0]).includes(global.authArray[playerAdmin.id][0])) {
+                    if (!global.masterList.includes(global.authArray[playerAdmin.id][0])) {
                         room.setPlayerAdmin(playerAdmin.id, true);
-                        adminList.push([authArray[playerAdmin.id][0], playerAdmin.name]);
+                        global.adminList.push([global.authArray[playerAdmin.id][0], playerAdmin.name]);
                         room.sendAnnouncement(
                             `${playerAdmin.name} is now a room admin !`,
                             null,
-                            announcementColor,
+                            colors.announcementColor,
                             'bold',
                             HaxNotification.CHAT
                         );
@@ -127,7 +130,7 @@ function setAdminCommand(player, message) {
                         room.sendAnnouncement(
                             `This player is a master already !`,
                             player.id,
-                            errorColor,
+                            colors.errorColor,
                             'bold',
                             HaxNotification.CHAT
                         );
@@ -136,7 +139,7 @@ function setAdminCommand(player, message) {
                     room.sendAnnouncement(
                         `This player is a permanent admin already !`,
                         player.id,
-                        errorColor,
+                        colors.errorColor,
                         'bold',
                         HaxNotification.CHAT
                     );
@@ -145,7 +148,7 @@ function setAdminCommand(player, message) {
                 room.sendAnnouncement(
                     `There is no player with such ID in the room. Enter "!help setadmin" for more information.`,
                     player.id,
-                    errorColor,
+                    colors.errorColor,
                     'bold',
                     HaxNotification.CHAT
                 );
@@ -154,7 +157,7 @@ function setAdminCommand(player, message) {
             room.sendAnnouncement(
                 `Incorrect format for your argument. Enter "!help setadmin" for more information.`,
                 player.id,
-                errorColor,
+                colors.errorColor,
                 'bold',
                 HaxNotification.CHAT
             );
@@ -163,7 +166,7 @@ function setAdminCommand(player, message) {
         room.sendAnnouncement(
             `Wrong number of arguments. Enter "!help setadmin" for more information.`,
             player.id,
-            errorColor,
+            colors.errorColor,
             'bold',
             HaxNotification.CHAT
         );
@@ -178,13 +181,13 @@ function removeAdminCommand(player, message) {
             if (room.getPlayer(parseInt(msgArray[0])) != null) {
                 var playerAdmin = room.getPlayer(parseInt(msgArray[0]));
 
-                if (adminList.map((a) => a[0]).includes(authArray[playerAdmin.id][0])) {
+                if (global.adminList.map((a) => a[0]).includes(global.authArray[playerAdmin.id][0])) {
                     room.setPlayerAdmin(playerAdmin.id, false);
-                    adminList = adminList.filter((a) => a[0] != authArray[playerAdmin.id][0]);
+                    global.adminList = global.adminList.filter((a) => a[0] != global.authArray[playerAdmin.id][0]);
                     room.sendAnnouncement(
                         `${playerAdmin.name} is not a room admin anymore !`,
                         null,
-                        announcementColor,
+                        colors.announcementColor,
                         'bold',
                         HaxNotification.CHAT
                     );
@@ -192,7 +195,7 @@ function removeAdminCommand(player, message) {
                     room.sendAnnouncement(
                         `This player isn't a permanent admin !`,
                         player.id,
-                        errorColor,
+                        colors.errorColor,
                         'bold',
                         HaxNotification.CHAT
                     );
@@ -201,24 +204,24 @@ function removeAdminCommand(player, message) {
                 room.sendAnnouncement(
                     `There is no player with such ID in the room. Enter "!help removeadmin" for more information.`,
                     player.id,
-                    errorColor,
+                    colors.errorColor,
                     'bold',
                     HaxNotification.CHAT
                 );
             }
-        } else if (msgArray[0].length > 0 && parseInt(msgArray[0]) < adminList.length) {
+        } else if (msgArray[0].length > 0 && parseInt(msgArray[0]) < global.adminList.length) {
             var index = parseInt(msgArray[0]);
-            var playerAdmin = adminList[index];
-            if (players.findIndex((p) => authArray[p.id][0] == playerAdmin[0]) != -1) {
+            var playerAdmin = global.adminList[index];
+            if (players.findIndex((p) => global.authArray[p.id][0] == playerAdmin[0]) != -1) {
                 // check if there is the removed admin in the room
-                var indexRem = players.findIndex((p) => authArray[p.id][0] == playerAdmin[0]);
+                var indexRem = players.findIndex((p) => global.authArray[p.id][0] == playerAdmin[0]);
                 room.setPlayerAdmin(players[indexRem].id, false);
             }
-            adminList.splice(index);
+            global.adminList.splice(index);
             room.sendAnnouncement(
                 `${playerAdmin[1]} is not a room admin anymore !`,
                 null,
-                announcementColor,
+                colors.announcementColor,
                 'bold',
                 HaxNotification.CHAT
             );
@@ -226,7 +229,7 @@ function removeAdminCommand(player, message) {
             room.sendAnnouncement(
                 `Incorrect format for your argument. Enter "!help removeadmin" for more information.`,
                 player.id,
-                errorColor,
+                colors.errorColor,
                 'bold',
                 HaxNotification.CHAT
             );
@@ -235,7 +238,7 @@ function removeAdminCommand(player, message) {
         room.sendAnnouncement(
             `Wrong number of arguments. Enter "!help removeadmin" for more information.`,
             player.id,
-            errorColor,
+            colors.errorColor,
             'bold',
             HaxNotification.CHAT
         );
@@ -251,7 +254,7 @@ function passwordCommand(player, message) {
             room.sendAnnouncement(
                 `The room password has been removed.`,
                 player.id,
-                announcementColor,
+                colors.announcementColor,
                 'bold',
                 HaxNotification.CHAT
             );
@@ -261,7 +264,7 @@ function passwordCommand(player, message) {
         room.sendAnnouncement(
             `The room password has been set to ${roomPassword}`,
             player.id,
-            announcementColor,
+            colors.announcementColor,
             'bold',
             HaxNotification.CHAT
         );
@@ -272,7 +275,7 @@ function passwordCommand(player, message) {
             room.sendAnnouncement(
                 `The room password has been removed.`,
                 player.id,
-                announcementColor,
+                colors.announcementColor,
                 'bold',
                 HaxNotification.CHAT
             );
@@ -280,7 +283,7 @@ function passwordCommand(player, message) {
             room.sendAnnouncement(
                 `The room currently does not have a password. Enter "!help password" for more information.`,
                 player.id,
-                errorColor,
+                colors.errorColor,
                 'bold',
                 HaxNotification.CHAT
             );

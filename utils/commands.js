@@ -1,49 +1,12 @@
-const room = require('../init.js');
+const { room } = require('../init.js');
 const { clearbansCommand, banListCommand, adminListCommand, setAdminCommand, removeAdminCommand, passwordCommand } = require('./commands/master.js');
 const { restartCommand, restartSwapCommand, swapCommand, stadiumCommand } = require('./commands/admin.js');
 const { masterCommand } = require('./commands/player.js');
+const { getRole } = require('./helpers/players.js');
+const colors = require('../resources/colors.js');
 
-let {
-    roomPassword,
-    players,
-    teamRed,
-    teamBlue,
-    teamSpec,
-    gameState,
-    playSituation,
-    goldenGoal,
-    banList,
-    possession,
-    actionZoneHalf,
-    lastTouches,
-    lastTeamTouched,
-    authArray,
-    adminList,
-    masterList,
-    Team,
-    State,
-    Role,
-    HaxNotification,
-    Situation
-} = require('./variables/globals.js');
+let { Role, HaxNotification } = require('./variables/structures.js');
 
-var welcomeColor = 0xc4ff65;
-var announcementColor = 0xffefd6;
-var infoColor = 0xbebebe;
-var privateMessageColor = 0xffc933;
-var redColor = 0xff4c4c;
-var blueColor = 0x62cbff;
-var warningColor = 0xffa135;
-var errorColor = 0xa40000;
-var successColor = 0x75ff75;
-var defaultColor = null;
-function getRole(player) {
-    return (
-        !!masterList.find((a) => a == authArray[player.id][0]) * 2 +
-        !!adminList.find((a) => a[0] == authArray[player.id][0]) * 1 +
-        player.admin * 1
-    );
-}
 function getCommand(commandStr) {
     if (commands.hasOwnProperty(commandStr)) return commandStr;
     for (const [key, value] of Object.entries(commands)) {
@@ -53,7 +16,6 @@ function getCommand(commandStr) {
     }
     return false;
 }
-
 
 function helpCommand(player, message) {
     var msgArray = message.split(/ +/).slice(1);
@@ -84,7 +46,7 @@ function helpCommand(player, message) {
         room.sendAnnouncement(
             commandString,
             player.id,
-            infoColor,
+            colors.infoColor,
             'bold',
             HaxNotification.CHAT
         );
@@ -94,7 +56,7 @@ function helpCommand(player, message) {
             room.sendAnnouncement(
                 `\'${commandName}\' command :\n${commands[commandName].desc}`,
                 player.id,
-                infoColor,
+                colors.infoColor,
                 'bold',
                 HaxNotification.CHAT
             );
@@ -102,7 +64,7 @@ function helpCommand(player, message) {
             room.sendAnnouncement(
                 `The command you tried to get information on does not exist. To check all available commands, type \'!help\'`,
                 player.id,
-                errorColor,
+                colors.errorColor,
                 'bold',
                 HaxNotification.CHAT
             );
@@ -224,5 +186,6 @@ Example: !removeadmin #300 will remove admin to the player with id 300,
 };
 
 module.exports = {
-    commands
+    commands,
+    getCommand
 };

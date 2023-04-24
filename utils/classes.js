@@ -1,15 +1,13 @@
-const room = require('../init.js');
-
-function getStartingLineups(teamRed, teamBlue, authArray) {
+function getStartingLineups() {
     var compositions = [[], []];
-    for (let player of teamRed) {
+    for (let player of global.teamRed) {
         compositions[0].push(
-            new PlayerComposition(player, authArray[player.id][0], [0], [])
+            new PlayerComposition(player, global.authArray[player.id][0], [0], [])
         );
     }
-    for (let player of teamBlue) {
+    for (let player of global.teamBlue) {
         compositions[1].push(
-            new PlayerComposition(player, authArray[player.id][0], [0], [])
+            new PlayerComposition(player, global.authArray[player.id][0], [0], [])
         );
     }
     return compositions;
@@ -25,10 +23,10 @@ class Goal {
 }
 
 class Game {
-    constructor(room, teamRed, teamBlue, authArray) {
+    constructor(room) {
         this.date = Date.now();
         this.scores = room.getScores();
-        this.playerComp = getStartingLineups(teamRed, teamBlue,authArray );
+        this.playerComp = getStartingLineups();
         this.goals = [];
         this.rec = room.startRecording();
         this.touchArray = [];

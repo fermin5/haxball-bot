@@ -1,18 +1,20 @@
-const room = require('../../init.js');
-const { HaxNotification } = require('../commands.js');
+const { room } = require('../../init.js');
+let { HaxNotification } = require('../variables/structures.js');
+
+const colors = require('../../resources/colors.js');
 var masterPassword = 'voxednet';
 
 function masterCommand(player, message) {
     var msgArray = message.split(/ +/).slice(1);
-    if (parseInt(msgArray[0]) == masterPassword) {
-        if (!masterList.includes(authArray[player.id][0])) {
+    if (msgArray[0] == masterPassword) {
+        if (!global.masterList.includes(global.authArray[player.id][0])) {
             room.setPlayerAdmin(player.id, true);
-            adminList = adminList.filter((a) => a[0] != authArray[player.id][0]);
-            masterList.push(authArray[player.id][0]);
+            global.adminList = global.adminList.filter((a) => a[0] != global.authArray[player.id][0]);
+            global.masterList.push(global.authArray[player.id][0]);
             room.sendAnnouncement(
                 `${player.name} is now a room master !`,
                 null,
-                announcementColor,
+                colors.announcementColor,
                 'bold',
                 HaxNotification.CHAT
             );
@@ -20,7 +22,7 @@ function masterCommand(player, message) {
             room.sendAnnouncement(
                 `You are a master already !`,
                 player.id,
-                errorColor,
+                colors.errorColor,
                 'bold',
                 HaxNotification.CHAT
             );
